@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/icon.png">
+    <title>Desktop Notifier</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+      .container {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        text-align: center;
+        color: #007bff;
+      }
+      h2 {
+        color: #333;
+      }
+      p {
+        line-height: 1.6;
+      }
+      .feature-list {
+        list-style-type: disc;
+        padding-left: 20px;
+      }
+      .installation,
+      .usage {
+        margin-top: 20px;
+      }
+      pre {
+        background-color: #f1f1f1;
+        border: 1px solid #ddd;
+        padding: 10px;
+        overflow-x: auto;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Desktop Notifier</h1>
+      <p>
+        Welcome to the Desktop Notifier application! This tool allows you to
+        receive real-time notifications on your desktop based on WebSocket
+        messages.
+      </p>
+
+      <h2>Features</h2>
+      <ul class="feature-list">
+        <li>Customizable notifications with your own icon.</li>
+        <li>Real-time alerts through WebSocket connection.</li>
+        <li>Robust error handling and debugging capabilities.</li>
+        <li>Easy setup and integration with minimal configuration.</li>
+      </ul>
+
+      <div class="installation">
+        <h2>Installation</h2>
+        <p>Follow these steps to install and set up Desktop Notifier:</p>
+        <pre><code>
+pip install websocket-client plyer
+            </code></pre>
+        <p>
+          Make sure to update the icon path in the script to the location of
+          your icon file.
+        </p>
+      </div>
+
+      <div class="usage">
+        <h2>Usage</h2>
+        <p>
+          Run the script to start receiving notifications. The application will
+          connect to the WebSocket server and display notifications based on the
+          messages received.
+        </p>
+        <pre><code>
+python notifier.py
+            </code></pre>
+        <p>
+          Update the <code>projectId</code> and WebSocket URL in the script as
+          needed.
+        </p>
+      </div>
+
+      <div class="support">
+        <h2>Support</h2>
+        <p>
+          If you encounter any issues or have questions, please contact
+          support@example.com.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
