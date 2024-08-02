@@ -2,14 +2,14 @@ import websocket
 import json
 from plyer import notification
 
-projectId = "1"  # Change this to project's unique ID
+projectId = "1"  # Change this to your project's unique ID
 
 def on_message(ws, message):
     data = json.loads(message)
     title = data.get('title', 'Notification')
     msg = data.get('message', '')
     notification.notify(
-        app_icon="icon.ico",  
+        app_icon="icon.ico",
         title=title,
         message=msg,
         app_name='Desktop Notifier',
@@ -29,7 +29,7 @@ def on_open(ws):
 if __name__ == "__main__":
     websocket.enableTrace(True)
     ws = websocket.WebSocketApp(
-        "ws://localhost:8080/",
+        "ws://localhost:8000/",
         on_open=on_open,
         on_message=on_message,
         on_error=on_error,
