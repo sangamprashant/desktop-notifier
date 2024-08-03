@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 app.use(cors());
@@ -31,9 +32,6 @@ io.on('connection', (socket) => {
         projectSockets[data.projectId] = [];
       }
       projectSockets[data.projectId].push(socket);
-
-      // Send notification asynchronously
-      await sendNotification(socket, 'Notification', 'You have successfully registered!');
     } else {
       socket.emit('error', 'Invalid projectId');
       socket.disconnect();
@@ -51,16 +49,6 @@ io.on('connection', (socket) => {
   });
 });
 
-// Example async function for sending notifications
-async function sendNotification(socket, title, message) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      socket.emit('notification', { title, message });
-      resolve();
-    }, 100); // Simulate delay
-  });
-}
-
 app.post('/api/notify', (req, res) => {
   const { projectId, title, message } = req.body;
 
@@ -77,6 +65,15 @@ app.post('/api/notify', (req, res) => {
   } else {
     res.status(404).send('No clients connected with the given projectId');
   }
+});
+
+app.get("/ping",(req,res)=>{
+  console.log("Ping triggered")
+  res.send("pong");
+})
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "server.html"));
 });
 
 server.listen(8000, () => {
