@@ -1,74 +1,56 @@
-const http = require('http');
-const WebSocket = require('ws');
 const express = require('express');
-const bodyParser = require('body-parser');
+const http = require('http');
+const socketIo = require('socket.io');
 const cors = require('cors');
-const path = require('path');
 
 const app = express();
-const port = process.env.PORT || 8000;
-
-// Middleware
-app.use(bodyParser.json());
-app.use(cors());
-
-// Create HTTP server
 const server = http.createServer(app);
-
-// Create WebSocket server and attach it to the HTTP server
-const wss = new WebSocket.Server({ server });
-const clients = {};
-
-wss.on('connection', ws => {
-    console.log('New WebSocket connection');
-
-    ws.on('message', message => {
-        const { type, projectId } = JSON.parse(message);
-
-        if (type === 'register') {
-            if (!clients[projectId]) {
-                clients[projectId] = [];
-            }
-            clients[projectId].push(ws);
-            console.log(`Project ${projectId} registered`);
-        }
-    });
-
-    ws.on('close', () => {
-        for (const [projectId, projectClients] of Object.entries(clients)) {
-            clients[projectId] = projectClients.filter(clientWs => clientWs !== ws);
-            if (clients[projectId].length === 0) {
-                delete clients[projectId];
-            }
-        }
-    });
+const io = socketIo(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
 });
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "server.html"));
-});
-app.post('/api/notifier', (req, res) => {
-  const { title, message, projectId } = req.body;
-  
-  if (!title || !message || !projectId) {
-    return res.status(400).send({ message: "Missing required fields", success: false });
-  }
+app.use(express.json());
+app.use(cors())
 
-  const projectClients = clients[projectId];
-  
-  if (!projectClients || projectClients.length === 0) {
-    return res.status(404).send({ message: "No clients found", success: false });
-  }
+let clients = {};
 
-  projectClients.forEach(client => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify({ title, message }));
-    }
+io.on('connection', (socket) => {
+  console.log('New client connected');
+
+  socket.on('register', (data) => {
+    const { projectId } = data;
+    clients[projectId] = socket.id;
+    console.log(`Client registered with projectId: ${projectId}`);
   });
 
-  res.status(200).send({ message: "Notification sent", success: true });
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+    Object.keys(clients).forEach((projectId) => {
+      if (clients[projectId] === socket.id) {
+        delete clients[projectId];
+      }
+    });
+  });
 });
 
-server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
+app.post('/submit', (req, res) => {
+  const { title, message, projectId } = req.body;
+
+  console.log(req.body)
+
+  if (clients[projectId]) {
+    const socketId = clients[projectId];
+    io.to(socketId).emit('notification', { title, message });
+    res.status(200).send('Notification sent');
+  } else {
+    res.status(404).send('Client not found');
+  }
+});
+
+server.listen(8000, () => {
+  console.log('Server is running on port 8000');
 });

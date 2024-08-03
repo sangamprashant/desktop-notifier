@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View, Alert, ScrollView } from "react-native";
 import { useSession } from "../context/ctx";
-import { NativeWindStyleSheet } from "nativewind";
-
-NativeWindStyleSheet.setOutput({
-  default: "native",
-});
 
 const HomeScreen = () => {
-  const { clearSession } = useSession();
+  const { projectId, clearSession } = useSession();
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState({ title: false, message: false });
@@ -23,11 +18,27 @@ const HomeScreen = () => {
     return !newErrors.title && !newErrors.message;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateFields()) {
-      // Handle form submission logic here
       setSubmittedData({ title, message });
-      Alert.alert("Form Submitted", `Title: ${title}\nMessage: ${message}`);
+      try {
+        const response = await fetch('http://localhost:8000/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ title, message, projectId }),
+        });
+
+        if (response.ok) {
+          Alert.alert("Form Submitted", `Title: ${title}\nMessage: ${message}`);
+        } else {
+          Alert.alert("Submission Error", "There was an error submitting the form.");
+        }
+      } catch (error) {
+        Alert.alert("Submission Error", "There was an error submitting the form.");
+        console.error(error);
+      }
     } else {
       Alert.alert("Validation Error", "Please fill out all required fields.");
     }
