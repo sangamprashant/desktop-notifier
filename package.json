@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "keep-alive": "node server-keep-alive/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.3",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
