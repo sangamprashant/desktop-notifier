@@ -2,7 +2,6 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const cors = require('cors');
-const path = require('path');
 
 const app = express();
 app.use(cors());
@@ -11,7 +10,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "*", // Or specify your client's origin
+    origin: "*",
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
     credentials: true
@@ -24,15 +23,17 @@ const projectSockets = {};
 io.on('connection', (socket) => {
   console.log('a user connected:', socket.id);
 
-  socket.on('register', (data) => {
+  socket.on('register', async (data) => {
     console.log('register event received:', data);
 
     if (data.projectId && typeof data.projectId === 'string') {
-      // Associate socket with project ID
       if (!projectSockets[data.projectId]) {
         projectSockets[data.projectId] = [];
       }
       projectSockets[data.projectId].push(socket);
+
+      // Send notification asynchronously
+      await sendNotification(socket, 'Notification', 'You have successfully registered!');
     } else {
       socket.emit('error', 'Invalid projectId');
       socket.disconnect();
@@ -41,7 +42,6 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
-    // Remove socket from project associations
     for (const projectId in projectSockets) {
       projectSockets[projectId] = projectSockets[projectId].filter(s => s !== socket);
       if (projectSockets[projectId].length === 0) {
@@ -51,15 +51,21 @@ io.on('connection', (socket) => {
   });
 });
 
-// API endpoint to broadcast notifications
+// Example async function for sending notifications
+async function sendNotification(socket, title, message) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      socket.emit('notification', { title, message });
+      resolve();
+    }, 100); // Simulate delay
+  });
+}
+
 app.post('/api/notify', (req, res) => {
   const { projectId, title, message } = req.body;
 
   if (!projectId || !title || !message) {
-    return res.status(400).json({
-      message:'Missing projectId, title, or message',
-      success:false
-    });
+    return res.status(400).send('Missing projectId, title, or message');
   }
 
   const sockets = projectSockets[projectId];
@@ -67,18 +73,10 @@ app.post('/api/notify', (req, res) => {
     sockets.forEach(socket => {
       socket.emit('notification', { title, message });
     });
-    res.status(200).json({
-      message:'Notification sent', success:true
-    });
+    res.status(200).send('Notification sent');
   } else {
-    res.status(404).json({
-      message:'No clients connected with the given projectId', success:false
-    });
+    res.status(404).send('No clients connected with the given projectId');
   }
-});
-
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "server.html"));
 });
 
 server.listen(8000, () => {

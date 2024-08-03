@@ -2,11 +2,11 @@ import socketio
 from plyer import notification as plyer_notification
 
 # replace with the project id in the mobile-app
-project_id = "2" 
+project_id = "1" 
 
 # Create a Socket.IO client
-# sio = socketio.Client(logger=True, engineio_logger=True)
-sio = socketio.Client()
+sio = socketio.Client(logger=True, engineio_logger=True)
+# sio = socketio.Client()
 
 @sio.event
 def connect():
@@ -33,4 +33,5 @@ def on_notification(data):
 if __name__ == "__main__":
     # Use the correct URL for the server
     sio.connect('https://405a7f5e-dd2b-40aa-844d-1f43c5aaeb2f-00-28m09n76xiw8m.sisko.replit.dev/', transports=['websocket'])
+    # sio.connect('https://desktop-notifier-woad.vercel.app', transports=['polling'])
     sio.wait()
