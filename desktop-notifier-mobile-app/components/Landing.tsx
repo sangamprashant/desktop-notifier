@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import {
-  View,
-  TextInput,
-  Text,
+  Alert,
   Button,
   SafeAreaView,
-  Alert,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 import { AppContext } from "../context/ctx";
 
@@ -39,7 +39,7 @@ const Landing = () => {
         "Error",
         "Please enter both application name and project ID."
       );
-     }
+    }
   };
 
   return (

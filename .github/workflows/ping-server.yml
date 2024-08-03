@@ -2,12 +2,16 @@ name: Ping Server
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # Every 5 minutes
-  workflow_dispatch:  # Allows manual triggering of the workflow
+    - cron: "*/5 * * * *" # Every 5 minutes
+  workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
   ping:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ping-server # Group name for concurrency control
+      cancel-in-progress: true # Cancel any in-progress runs if a new run is triggered
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -15,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Use the Node.js version your project requires
+          node-version: "20" # Use the Node.js version your project requires
 
       - name: Install dependencies
         run: npm install

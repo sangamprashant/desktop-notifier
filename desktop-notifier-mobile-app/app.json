@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "desktop-notifier-mobile-app",
+    "name": "Desktop Notifier",
     "slug": "desktop-notifier-mobile-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "desktopnotifier",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -13,13 +13,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sangamprashant.desktopnotifier"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+       "package": "com.sangamprashant.desktopnotifier"
     },
     "web": {
       "bundler": "metro",

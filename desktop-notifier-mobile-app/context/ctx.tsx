@@ -1,7 +1,6 @@
+import { useRouter } from "expo-router";
 import React, { useEffect } from "react";
 import { useStorageState } from "./useStorageState";
-import { useRouter } from "expo-router";
-import { Alert } from "react-native";
 
 // Define the context type with the correct function signatures
 type AuthContextType = {

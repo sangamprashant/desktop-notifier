@@ -32,5 +32,5 @@ def on_notification(data):
     )
 
 if __name__ == "__main__":
-    sio.connect('https://desktop-notifier.onrender.com/', transports=['websocket'])
+    sio.connect('https://desktop-notifier.onrender.com', transports=['websocket'])
     sio.wait()

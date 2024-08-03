@@ -1,12 +1,10 @@
-import * as SecureStore from 'expo-secure-store';
-import * as React from 'react';
-import { Platform } from 'react-native';
+import * as SecureStore from "expo-secure-store";
+import * as React from "react";
+import { Platform } from "react-native";
 
 type UseStateHook<T> = [T | null, (value: T | null) => void];
 
-function useAsyncState<T>(
-  initialValue: T | null = null,
-): UseStateHook<T> {
+function useAsyncState<T>(initialValue: T | null = null): UseStateHook<T> {
   return React.useReducer(
     (state: T | null, action: T | null): T | null => action,
     initialValue
@@ -15,7 +13,7 @@ function useAsyncState<T>(
 
 export async function setStorageItemAsync(key: string, value: string | null) {
   try {
-    if (Platform.OS === 'web') {
+    if (Platform.OS === "web") {
       if (value === null) {
         localStorage.removeItem(key);
       } else {
@@ -29,7 +27,7 @@ export async function setStorageItemAsync(key: string, value: string | null) {
       }
     }
   } catch (e) {
-    console.error('Error accessing storage:', e);
+    console.error("Error accessing storage:", e);
   }
 }
 
@@ -39,7 +37,7 @@ export function useStorageState(key: string): UseStateHook<string> {
   React.useEffect(() => {
     async function fetchStoredValue() {
       try {
-        if (Platform.OS === 'web') {
+        if (Platform.OS === "web") {
           const storedValue = localStorage.getItem(key);
           setState(storedValue);
         } else {
@@ -47,7 +45,7 @@ export function useStorageState(key: string): UseStateHook<string> {
           setState(storedValue);
         }
       } catch (e) {
-        console.error('Error fetching from storage:', e);
+        console.error("Error fetching from storage:", e);
       }
     }
 

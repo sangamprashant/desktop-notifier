@@ -4,11 +4,11 @@ import Home from "../components/Home";
 import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen = () => {
-  const { appName } = useSession(); 
+  const { appName } = useSession();
   const navigation = useNavigation();
   useEffect(() => {
     if (appName) {
-      navigation.setOptions({ title: appName }); 
+      navigation.setOptions({ title: appName });
     }
   }, [appName, navigation]);
 
