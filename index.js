@@ -5,55 +5,82 @@ const cors = require('cors');
 const path = require('path');
 
 const app = express();
+app.use(cors());
+app.use(express.json());
+
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "*",
+    origin: "*", // Or specify your client's origin
     methods: ["GET", "POST"],
-    credentials: true,
-  },
+    allowedHeaders: ["Content-Type"],
+    credentials: true
+  }
 });
 
-app.use(express.json());
-app.use(cors())
-
-let clients = {};
+// Store socket associations with project IDs
+const projectSockets = {};
 
 io.on('connection', (socket) => {
-  console.log('New client connected');
+  console.log('a user connected:', socket.id);
 
   socket.on('register', (data) => {
-    const { projectId } = data;
-    clients[projectId] = socket.id;
-    console.log(`Client registered with projectId: ${projectId}`);
+    console.log('register event received:', data);
+
+    if (data.projectId && typeof data.projectId === 'string') {
+      // Associate socket with project ID
+      if (!projectSockets[data.projectId]) {
+        projectSockets[data.projectId] = [];
+      }
+      projectSockets[data.projectId].push(socket);
+    } else {
+      socket.emit('error', 'Invalid projectId');
+      socket.disconnect();
+    }
   });
 
   socket.on('disconnect', () => {
-    console.log('Client disconnected');
-    Object.keys(clients).forEach((projectId) => {
-      if (clients[projectId] === socket.id) {
-        delete clients[projectId];
+    console.log('user disconnected');
+    // Remove socket from project associations
+    for (const projectId in projectSockets) {
+      projectSockets[projectId] = projectSockets[projectId].filter(s => s !== socket);
+      if (projectSockets[projectId].length === 0) {
+        delete projectSockets[projectId];
       }
-    });
+    }
   });
+});
+
+// API endpoint to broadcast notifications
+app.post('/api/notify', (req, res) => {
+  const { projectId, title, message } = req.body;
+
+  if (!projectId || !title || !message) {
+    return res.status(400).json({
+      message:'Missing projectId, title, or message',
+      success:false
+    });
+  }
+
+  const sockets = projectSockets[projectId];
+  if (sockets) {
+    sockets.forEach(socket => {
+      socket.emit('notification', { title, message });
+    });
+    res.status(200).json({
+      message:'Notification sent', success:true
+    });
+  } else {
+    res.status(404).json({
+      message:'No clients connected with the given projectId', success:false
+    });
+  }
 });
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "server.html"));
 });
 
-app.post('/submit', (req, res) => {
-  const { title, message, projectId } = req.body;
-  console.log(req.body)
-  if (clients[projectId]) {
-    const socketId = clients[projectId];
-    io.to(socketId).emit('notification', { title, message });
-    res.status(200).send('Notification sent');
-  } else {
-    res.status(404).send('Client not found');
-  }
-});
-
 server.listen(8000, () => {
-  console.log('Server is running on port 8000');
+  console.log('Listening on port 8000');
 });

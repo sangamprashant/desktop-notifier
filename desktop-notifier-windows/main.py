@@ -1,17 +1,25 @@
 import socketio
-import json
 from plyer import notification as plyer_notification
 
+# replace with the project id in the mobile-app
+project_id = "2" 
+
 # Create a Socket.IO client
+# sio = socketio.Client(logger=True, engineio_logger=True)
 sio = socketio.Client()
 
 @sio.event
 def connect():
     print("Connected to server")
-    sio.emit('register', {'projectId': '1'})  # Replace with your actual projectId
+    sio.emit('register', {'projectId': project_id})
 
 @sio.event
-def notification(data):
+def disconnect():
+    print("Disconnected from server")
+
+@sio.on('notification')
+def on_notification(data):
+    print(f"Notification for {project_id}: {data}")
     title = data.get('title', 'Notification')
     msg = data.get('message', '')
     plyer_notification.notify(
@@ -22,10 +30,7 @@ def notification(data):
         timeout=10
     )
 
-@sio.event
-def disconnect():
-    print("Disconnected from server")
-
 if __name__ == "__main__":
-    sio.connect('https://desktop-notifier-woad.vercel.app')  # Adjust URL if needed
-    sio.wait()  # Keeps the client running
+    # Use the correct URL for the server
+    sio.connect('https://405a7f5e-dd2b-40aa-844d-1f43c5aaeb2f-00-28m09n76xiw8m.sisko.replit.dev/', transports=['websocket'])
+    sio.wait()
