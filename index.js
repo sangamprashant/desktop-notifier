@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
@@ -37,11 +38,13 @@ io.on('connection', (socket) => {
   });
 });
 
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "server.html"));
+});
+
 app.post('/submit', (req, res) => {
   const { title, message, projectId } = req.body;
-
   console.log(req.body)
-
   if (clients[projectId]) {
     const socketId = clients[projectId];
     io.to(socketId).emit('notification', { title, message });

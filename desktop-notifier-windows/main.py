@@ -27,5 +27,5 @@ def disconnect():
     print("Disconnected from server")
 
 if __name__ == "__main__":
-    sio.connect('http://localhost:8000')  # Adjust URL if needed
+    sio.connect('https://desktop-notifier-woad.vercel.app')  # Adjust URL if needed
     sio.wait()  # Keeps the client running

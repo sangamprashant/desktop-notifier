@@ -22,7 +22,7 @@ const HomeScreen = () => {
     if (validateFields()) {
       setSubmittedData({ title, message });
       try {
-        const response = await fetch('http://localhost:8000/submit', {
+        const response = await fetch('https://desktop-notifier-woad.vercel.app/submit', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
