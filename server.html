@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="/icon.png">
+    <link rel="icon" href="./icon.png" type="image/png" />
     <title>Desktop Notifier</title>
     <style>
       body {
@@ -46,6 +46,57 @@
         overflow-x: auto;
         border-radius: 4px;
       }
+      code {
+        background-color: #f1f1f1;
+        padding: 2px 4px;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+      .support {
+        margin-top: 20px;
+      }
+      .images {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+      }
+      .images img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+      }
+      .git-links {
+        margin-top: 20px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+      }
+      .git-links a {
+        color: #ffffff;
+        text-decoration: none;
+      }
+ 
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 20px;
+        border: none;
+        border-radius: 4px;
+        background: linear-gradient(45deg, #007bff, #00c6ff);
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.3s, transform 0.3s;
+      }
+      .button:hover {
+        background: linear-gradient(45deg, #0056b3, #0099ff);
+        transform: scale(1.05);
+      }
     </style>
   </head>
   <body>
@@ -68,9 +119,7 @@
       <div class="installation">
         <h2>Installation</h2>
         <p>Follow these steps to install and set up Desktop Notifier:</p>
-        <pre><code>
-pip install websocket-client plyer
-            </code></pre>
+        <pre><code>pip install -r requirements.txt</code></pre>
         <p>
           Make sure to update the icon path in the script to the location of
           your icon file.
@@ -84,20 +133,62 @@ pip install websocket-client plyer
           connect to the WebSocket server and display notifications based on the
           messages received.
         </p>
-        <pre><code>
-python notifier.py
-            </code></pre>
+        <pre><code>python main.py</code></pre>
         <p>
           Update the <code>projectId</code> and WebSocket URL in the script as
           needed.
         </p>
       </div>
 
-      <div class="support">
-        <h2>Support</h2>
+      <div class="images">
+        <div
+          style="display: flex; justify-content: space-between; flex-wrap: wrap"
+          align="center"
+        >
+          <img src="./1.jpg" style="width: 48%" alt="Screenshot 2" />
+          <img src="./2.jpg" style="width: 48%" alt="Screenshot 3" />
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 10px;
+          "
+          align="center"
+        >
+          <img src="./3.jpg" style="width: 48%" alt="Screenshot 4" />
+          <img src="./4.jpg" style="width: 48%" alt="Screenshot 5" />
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 10px;
+          "
+          align="center"
+        >
+          <img src="./5.jpg" style="width: 48%" alt="Screenshot 6" />
+        </div>
+        <img src="./6.png" style="width: 100%" alt="Screenshot 7" />
+      </div>
+      <div class="git-links">
         <p>
-          If you encounter any issues or have questions, please contact
-          support@example.com.
+          <a
+            href="https://github.com/sangamprashant/desktop-notifier"
+            target="_blank"
+            class="button"
+            >GitHub Repository</a
+          >
+        </p>
+        <p>
+          <a
+            href="https://github.com/sangamprashant/desktop-notifier/releases"
+            target="_blank"
+            class="button"
+            >App Releases</a
+          >
         </p>
       </div>
     </div>

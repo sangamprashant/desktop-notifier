@@ -13,15 +13,14 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.sangamprashant.desktopnotifier"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-       "package": "com.sangamprashant.desktopnotifier"
+      "package": "com.sangamprashant.desktopnotifier"
     },
     "web": {
       "bundler": "metro",
@@ -33,6 +32,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "3eb5b203-f1f5-4d3a-bd9e-92904eddd9f0"
+      }
     }
   }
 }

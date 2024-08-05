@@ -86,6 +86,19 @@ const HomeScreen = () => {
     }
   };
 
+  // Clear response data on text change
+  const handleTitleChange = (text: string) => {
+    setTitle(text);
+    setResponseData(null);
+    setTimeRemaining(20);
+  };
+
+  const handleMessageChange = (text: string) => {
+    setMessage(text);
+    setResponseData(null);
+    setTimeRemaining(20);
+  };
+
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
@@ -102,7 +115,7 @@ const HomeScreen = () => {
           } mb-4`}
           placeholder="Enter the title"
           value={title}
-          onChangeText={setTitle}
+          onChangeText={handleTitleChange}
         />
         {errors.title && (
           <Text className="text-red-600 mb-2">Title is required.</Text>
@@ -114,7 +127,7 @@ const HomeScreen = () => {
           } mb-6`}
           placeholder="Enter your message"
           value={message}
-          onChangeText={setMessage}
+          onChangeText={handleMessageChange}
           multiline
         />
         {errors.message && (

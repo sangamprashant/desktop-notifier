@@ -13,12 +13,6 @@ const RootLayout = () => {
 
   return (
     <SessionProvider>
-      <StatusBar
-        animated={true}
-        backgroundColor="#172554"
-        style="light"
-        hidden={false}
-      />
       <Stack
         screenOptions={{
           headerShown: true,

@@ -80,7 +80,7 @@ app.get("/ping", (req, res) => {
   console.log("Ping triggered");
   res.send("pong");
 });
-
+app.use(express.static(path.join(__dirname, 'assets')));
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "server.html"));
 });
